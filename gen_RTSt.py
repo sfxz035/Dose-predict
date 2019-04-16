@@ -34,9 +34,12 @@ def matchContour(RS_file,Slice,index):
     mub = []
     for i in range(numberofROI):    ##选取靶区
         ite = 0
-        nub = index[i]
+        nub = index[i]          ## 靶区序号
+        if nub == -1:
+            print("存在-1情况,靶区顺序号: "+str(i))
+            print(RS_file.PatientName)
         try:
-            numberofcoutours = len(RS_file.ROIContourSequence[nub].ContourSequence) #靶区层数
+            numberofcoutours = len(RS_file.ROIContourSequence[nub].ContourSequence) #每一层的靶区层数
             for j in range(numberofcoutours):
                 csContent = RS_file.ROIContourSequence[nub].ContourSequence[j]
                 dcmname = 'CT.' + csContent.ContourImageSequence[0].ReferencedSOPInstanceUID + '.dcm'
@@ -44,16 +47,19 @@ def matchContour(RS_file,Slice,index):
                 x = int(x[-2])
                 if Slice == x:
                     ite += 1
-                    nubslc = j
+                    if ite == 1:
+                        nubslc = str(j)
                     # mub.append((nub,j,ite))
                     if ite >1 :
-                        print(str(Slice)+' '+str(i)+' '+str(j))
-                        print(RS_file.PatientName)
-                if j == numberofcoutours-1:
-                    if ite == 0:
-                        mub.append(((-1,-1,0)))
-                    else:
-                        mub.append((nub,nubslc,ite))
+                        nubslc = nubslc+' '+str(j)
+                        # print(str(Slice)+' '+str(nub)+' '+nubslc)
+                        print("\t","Slice: [%2d], 靶区顺序号: [%2d], ROI contour靶区序号: [%2d]," \
+                              % (Slice,i,nub)+ 'Contour序号:'+nubslc)
+                        print("\t",RS_file.PatientName)
+            if ite == 0:
+                mub.append([-1,-1,0])
+            else:
+                mub.append([nub,nubslc,ite])
         except(AttributeError):
             mub.append((-1,-1,0))
             print('no ContourSequence'+' '+str(nub))
@@ -66,12 +72,12 @@ def rectcontour(RS_file,dcm_file, pairCont,indexList):
     numberofROI = len(indexList)  ##靶区的个数
 
     img_sum = np.zeros((512,512,numberofROI))
-    j = 0
     for i in range(numberofROI):
-        ROIC = pairCont[i+j]
-        w, l = ROIC[0], ROIC[1]
+        ROIC = pairCont[i]
+        w, l = ROIC[0], ROIC[1]         ## w为对应靶区序号，l为靶区对应contoursequence
         ite = ROIC[2]
         if ite == 1:
+            l = int(l)
             csContent = RS_file.ROIContourSequence[w].ContourSequence[l]      ##靶区第i层信息
             numberofPoint = int(csContent.NumberOfContourPoints)  # 该层靶区的曲线点数
             wldPosition = np.zeros((numberofPoint, 3))  # 靶区曲线的物理坐标
@@ -101,12 +107,14 @@ def rectcontour(RS_file,dcm_file, pairCont,indexList):
             # plt.show()
         elif ite > 1:
             print(w)
-            mask_sum = np.zeros([512,512,ite])
-            j = ite - 1
+            lList = list(map(int,l.split(' ')))
+            mask_sum = np.zeros([512,512,ite],dtype=bool)
+            # j = ite - 1
             for chf in range(ite):
-                ROIC = pairCont[i + chf]
-                w, l = ROIC[0], ROIC[1]
-                csContent = RS_file.ROIContourSequence[w].ContourSequence[l]  ##靶区第i层信息
+                # ROIC = pairCont[i + chf]
+                # w, l = ROIC[0], ROIC[1]
+                aa = lList[chf]
+                csContent = RS_file.ROIContourSequence[w].ContourSequence[aa]  ##靶区第i层信息
                 numberofPoint = int(csContent.NumberOfContourPoints)  # 该层靶区的曲线点数
                 wldPosition = np.zeros((numberofPoint, 3))  # 靶区曲线的物理坐标
                 picPosition = np.zeros((numberofPoint, 2*ite))  # 靶区曲线的图像空间
@@ -115,8 +123,8 @@ def rectcontour(RS_file,dcm_file, pairCont,indexList):
                     wldPosition[jj, 0] = csContent.ContourData[ii]  # 物理坐标
                     wldPosition[jj, 1] = csContent.ContourData[ii + 1]
                     wldPosition[jj, 2] = csContent.ContourData[ii + 2]
-                    picPosition[chf, 0] = np.round((wldPosition[jj, 0] - dcmOrigin[0]) / dcmSpacing[0])  # 轮廓x坐标
-                    picPosition[chf+1, 1] = np.round((wldPosition[jj, 1] - dcmOrigin[1]) / dcmSpacing[1])  # 轮廓y坐标
+                    picPosition[jj, 0] = np.round((wldPosition[jj, 0] - dcmOrigin[0]) / dcmSpacing[0])  # 轮廓x坐标
+                    picPosition[jj, 1] = np.round((wldPosition[jj, 1] - dcmOrigin[1]) / dcmSpacing[1])  # 轮廓y坐标
                 x = list(range(512))
                 y = x
                 [X, Y] = np.meshgrid(x, y)
@@ -125,8 +133,27 @@ def rectcontour(RS_file,dcm_file, pairCont,indexList):
                 x_cont = picPosition[:, 0]
                 y_cont = picPosition[:, 1]
                 mask = inpolygon(x, y, x_cont, y_cont)
+                mask = np.reshape(mask, (512, 512))
+                # mask_no = ~mask
+                # img[mask] = 255
+                # img[mask_no] = 0
+                # plt.imshow(img, cmap='gray')
+                # plt.plot(x_cont,y_cont)
+                # plt.show()
                 mask_sum[:,:,chf] = mask
-        #     # img_sum[:,:,i] =
+            maskFs = mask_sum[:,:,0]
+            for ii in range(1,ite):
+                maskLin = mask_sum[:,:,ii]
+                maskFs = maskFs^maskLin
+            mask_no = ~maskFs
+            img[maskFs] = 255
+            img[mask_no] = 0
+            img_sum[:,:,i] = img
+            # plt.imshow(img, cmap='gray')
+            # # plt.plot(x_cont,y_cont)
+            # plt.show()
+        # plt.imshow(img_sum[:,:,i],cmap='gray')
+        # plt.show()
     return img_sum
 def readfile(INPUT_FOLDER,index,slice):
     patients = os.listdir(INPUT_FOLDER)

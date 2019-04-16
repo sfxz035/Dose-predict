@@ -178,8 +178,9 @@ def matchIndex(Rs_file,targetName):     #匹配器官的ROInumber,获得
     ROIContourSq = Rs_file.ROIContourSequence
     for i in range(len(structRoISequence)):
         ROIName = structRoISequence[i].ROIName
-        if ROIName in targetName:
-            wz = targetName.index(ROIName)
+        # if ROIName in targetName:
+        if ROIName.upper() in targetName:  # 关键就是要学会使用列表解析
+            wz = targetName.index(ROIName.upper())
             ROINumber = structRoISequence[i].ROINumber
             ROINumberSu[wz] = ROINumber
     for j in range(len(ROIContourSq)):

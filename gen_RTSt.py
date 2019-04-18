@@ -62,8 +62,8 @@ def matchContour(RS_file,Slice,index):
                 mub.append([nub,nubslc,ite])
         except(AttributeError):
             mub.append((-1,-1,0))
-            print('no ContourSequence'+' '+str(nub))
-            print(RS_file.PatientName)
+            print('\t','no ContourSequence'+' '+str(nub))
+            print('\t',RS_file.PatientName)
     return mub
 def rectcontour(RS_file,dcm_file, pairCont,indexList):
     img = np.zeros((512,512))

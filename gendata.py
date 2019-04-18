@@ -30,4 +30,5 @@ if __name__ == '__main__':
             img_ret = gen_RTSt.rectcontour(Rs_file,dcm_file,pairCont,indexContour)
             # sio.savemat('./data/data.'+str(ii)+'.'+str(Slice)+'.mat', {'RTSt': img_ret,'RTDose:':ArrDose[:,:,m]})
             # np.savez('./data/data.'+str(ii)+'.'+str(Slice)+'.npz',RTSt=img_ret,RTDose=ArrDose[:,:,m])
-            print(str(indexPatient)+' '+str(m))
+            print("患者序号： [%2d], 切片序号：[%2d]. "\
+                    %(ii,Slice))

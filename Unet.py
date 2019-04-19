@@ -359,7 +359,7 @@ def net(input,len,dropout_value):
     relu11 = tf.nn.relu(tf.layers.batch_normalization(conv11,training=True))
     # b11 = int_b(shape=[out11_channel],name='b11')
     # relu11 = tf.nn.relu(tf.nn.bias_add(conv11, b11))
-    relu11 = tf.nn.dropout(relu11, rate=dropout_value)  # dropout
+    relu11 = tf.nn.dropout(relu11, keep_prob=dropout_value)  # dropout
 
     # conv2
     w12 = int_w(shape=[conv12_size, conv12_size, inp12_channel, out12_channel], name='W12')

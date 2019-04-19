@@ -12,7 +12,7 @@ config.gpu_options.allow_growth = True      #程序按需申请内存
 sess = tf.InteractiveSession(config = config)
 
 epoch = 2000000
-batch_size = 1
+batch_size = 7
 learning_rate = 0.0001
 savenet_path = './libSaveNet/save_unet/'
 trainfile_dir = './data/train/'
@@ -58,9 +58,9 @@ def train():
             # batch_input = x_train[idx * batch_size: (idx + 1) * batch_size]
             # batch_labels = y_train[idx * batch_size: (idx + 1) * batch_size]
             batch_input, batch_labels = dataset.random_batch(x_train,y_train,batch_size)
-            sess.run(train_step, feed_dict={x: batch_input, y_: batch_labels,dropout_value:0.8})
+            sess.run(train_step, feed_dict={x: batch_input, y_: batch_labels,dropout_value:0.85})
             count += 1
-            print(count)
+            # print(count)
             if count % 50 == 0:
                 m += 1
                 batch_input_test, batch_labels_test = dataset.random_batch(x_test, y_test, batch_size)
@@ -70,9 +70,9 @@ def train():
                 loss2 = sess.run(loss, feed_dict={x: batch_input_test, y_: batch_labels_test,dropout_value:1})
                 print("Epoch: [%2d], step: [%2d], train_loss: [%.8f]" \
                       % ((ep + 1), count, loss1), "\t", 'test_loss:[%.8f]' % (loss2))
-                writer.add_summary(sess.run(summary_op, feed_dict={x: batch_input, y_: batch_labels}), m)
+                writer.add_summary(sess.run(summary_op, feed_dict={x: batch_input, y_: batch_labels,dropout_value:1}), m)
                 writer2.add_summary(sess.run(summary_op2, feed_dict={x: batch_input_test,
-                                                                     y_: batch_labels_test}), m)
+                                                                     y_: batch_labels_test,dropout_value:1}), m)
             if (count + 1) % 5000 == 0:
                 saver.save(sess, os.path.join(savenet_path, 'conv_unet%d.ckpt-done' % (count)))
 

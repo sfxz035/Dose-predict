@@ -1,6 +1,6 @@
 import tensorflow as tf
 import math
-
+from tensorflow import keras
 EPS = 10e-5
 # batch_size = 10
 input_us = 512
@@ -237,21 +237,22 @@ def net(input,len):
     conv1 = tf.nn.conv2d(
         input, w1, strides=[1, 1, 1, 1], padding='SAME',name='conv1'
     )
-    # relu1 = tf.nn.relu(tf.layers.batch_normalization(conv1,training=True))
-    b1 = int_b(shape=[out1_channel],name='b1')
-    relu1 = tf.nn.relu(tf.nn.bias_add(conv1, b1))
+    relu1 = tf.nn.relu(tf.layers.batch_normalization(conv1,training=True))
+    # b1 = int_b(shape=[out1_channel],name='b1')
+    # relu1 = tf.nn.relu(tf.nn.bias_add(conv1, b1))
+    # relu1 = tf.nn.dropout(relu1, keep_prob=dropout_value)  # dropout
+
        #conv2
     w2 = int_w(shape=[conv2_size,conv2_size,inp2_channel,out2_channel],name='W2')
     conv2 = tf.nn.conv2d(
         relu1,w2,strides=[1, 1, 1, 1],padding='SAME',name='conv2'
     )
-    # relu2 = tf.nn.relu(tf.layers.batch_normalization(conv2,training=True))
-    b2 = int_b(shape=[out2_channel],name='b2')
-    relu2 = tf.nn.relu(tf.nn.bias_add(conv2, b2))
+    relu2 = tf.nn.relu(tf.layers.batch_normalization(conv2,training=True))
+    # b2 = int_b(shape=[out2_channel],name='b2')
+    # relu2 = tf.nn.relu(tf.nn.bias_add(conv2, b2))
     pool1 = tf.nn.max_pool(
         relu2,ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1],padding='SAME'
     )
-    # result_dropout = tf.nn.dropout(x=result_maxpool, keep_prob=keep_prob)
 
     ### layer2
     # conv1
@@ -259,17 +260,19 @@ def net(input,len):
     conv3 = tf.nn.conv2d(
         pool1, w3, strides=[1, 1, 1, 1], padding='SAME',name='conv3'
     )
-    # relu3 = tf.nn.relu(tf.layers.batch_normalization(conv3,training=True))
-    b3 = int_b(shape=[out3_channel],name='b3')
-    relu3 = tf.nn.relu(tf.nn.bias_add(conv3, b3))
+    relu3 = tf.nn.relu(tf.layers.batch_normalization(conv3,training=True))
+    # b3 = int_b(shape=[out3_channel],name='b3')
+    # relu3 = tf.nn.relu(tf.nn.bias_add(conv3, b3))
+    # relu3 = tf.nn.dropout(relu3, keep_prob=dropout_value)  # dropout
+
        #conv2
     w4 = int_w(shape=[conv4_size,conv4_size,inp4_channel,out4_channel],name='W4')
     conv4 = tf.nn.conv2d(
         relu3,w4,strides=[1, 1, 1, 1],padding='SAME',name='conv4'
     )
-    # relu4 = tf.nn.relu(tf.layers.batch_normalization(conv4,training=True))
-    b4 = int_b(shape=[out4_channel],name='b4')
-    relu4 = tf.nn.relu(tf.nn.bias_add(conv4, b4))
+    relu4 = tf.nn.relu(tf.layers.batch_normalization(conv4,training=True))
+    # b4 = int_b(shape=[out4_channel],name='b4')
+    # relu4 = tf.nn.relu(tf.nn.bias_add(conv4, b4))
     pool2 = tf.nn.max_pool(
         relu4,ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1],padding='SAME'
     )
@@ -280,18 +283,19 @@ def net(input,len):
     conv5 = tf.nn.conv2d(
         pool2, w5, strides=[1, 1, 1, 1], padding='SAME', name='conv5'
     )
-    # relu5 = tf.nn.relu(tf.layers.batch_normalization(conv5,training=True))
-    b5 = int_b(shape=[out5_channel],name='b5')
-    relu5 = tf.nn.relu(tf.nn.bias_add(conv5, b5))
+    relu5 = tf.nn.relu(tf.layers.batch_normalization(conv5,training=True))
+    # b5 = int_b(shape=[out5_channel],name='b5')
+    # relu5 = tf.nn.relu(tf.nn.bias_add(conv5, b5))
+    # relu5 = tf.nn.dropout(relu5, keep_prob=dropout_value)  # dropout
 
     # conv2
     w6 = int_w(shape=[conv6_size, conv6_size, inp6_channel, out6_channel], name='W6')
     conv6 = tf.nn.conv2d(
         relu5, w6, strides=[1, 1, 1, 1], padding='SAME', name='conv6'
     )
-    # relu6 = tf.nn.relu(tf.layers.batch_normalization(conv6,training=True))
-    b6 = int_b(shape=[out6_channel],name='b6')
-    relu6 = tf.nn.relu(tf.nn.bias_add(conv6, b6))
+    relu6 = tf.nn.relu(tf.layers.batch_normalization(conv6,training=True))
+    # b6 = int_b(shape=[out6_channel],name='b6')
+    # relu6 = tf.nn.relu(tf.nn.bias_add(conv6, b6))
 
     pool3 = tf.nn.max_pool(
         relu6, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME'
@@ -303,18 +307,19 @@ def net(input,len):
     conv7 = tf.nn.conv2d(
         pool3, w7, strides=[1, 1, 1, 1], padding='SAME', name='conv7'
     )
-    # relu7 = tf.nn.relu(tf.layers.batch_normalization(conv7,training=True))
-    b7 = int_b(shape=[out7_channel],name='b7')
-    relu7 = tf.nn.relu(tf.nn.bias_add(conv7, b7))
+    relu7 = tf.nn.relu(tf.layers.batch_normalization(conv7,training=True))
+    # b7 = int_b(shape=[out7_channel],name='b7')
+    # relu7 = tf.nn.relu(tf.nn.bias_add(conv7, b7))
+    # relu7 = tf.nn.dropout(relu7, keep_prob=dropout_value)  # dropout
 
     # conv2
     w8 = int_w(shape=[conv8_size, conv8_size, inp8_channel, out8_channel], name='W8')
     conv8 = tf.nn.conv2d(
         relu7, w8, strides=[1, 1, 1, 1], padding='SAME', name='conv8'
     )
-    # relu8 = tf.nn.relu(tf.layers.batch_normalization(conv8,training=True))
-    b8 = int_b(shape=[out8_channel],name='b8')
-    relu8 = tf.nn.relu(tf.nn.bias_add(conv8, b8))
+    relu8 = tf.nn.relu(tf.layers.batch_normalization(conv8,training=True))
+    # b8 = int_b(shape=[out8_channel],name='b8')
+    # relu8 = tf.nn.relu(tf.nn.bias_add(conv8, b8))
 
 
     pool4 = tf.nn.max_pool(
@@ -326,17 +331,19 @@ def net(input,len):
     conv9 = tf.nn.conv2d(
         pool4, w9, strides=[1, 1, 1, 1], padding='SAME', name='conv9'
     )
-    # relu9 = tf.nn.relu(tf.layers.batch_normalization(conv9,training=True))
-    b9 = int_b(shape=[out9_channel],name='b9')
-    relu9 = tf.nn.relu(tf.nn.bias_add(conv9, b9))
+    relu9 = tf.nn.relu(tf.layers.batch_normalization(conv9,training=True))
+    # b9 = int_b(shape=[out9_channel],name='b9')
+    # relu9 = tf.nn.relu(tf.nn.bias_add(conv9, b9))
+    # relu9 = tf.nn.dropout(relu9, keep_prob=dropout_value)  # dropout
+
     # conv2
     w10 = int_w(shape=[conv10_size, conv10_size, inp10_channel, out10_channel], name='W10')
     conv10 = tf.nn.conv2d(
         relu9, w10, strides=[1, 1, 1, 1], padding='SAME', name='conv10'
     )
-    # relu10 = tf.nn.relu(tf.layers.batch_normalization(conv10,training=True))
-    b10 = int_b(shape=[out10_channel],name='b10')
-    relu10 = tf.nn.relu(tf.nn.bias_add(conv10, b10))
+    relu10 = tf.nn.relu(tf.layers.batch_normalization(conv10,training=True))
+    # b10 = int_b(shape=[out10_channel],name='b10')
+    # relu10 = tf.nn.relu(tf.nn.bias_add(conv10, b10))
 
 
     pool5 = tf.nn.max_pool(
@@ -349,15 +356,19 @@ def net(input,len):
     conv11 = tf.nn.conv2d(
         pool5, w11, strides=[1, 1, 1, 1], padding='SAME', name='conv11'
     )
-    b11 = int_b(shape=[out11_channel],name='b11')
-    relu11 = tf.nn.relu(tf.nn.bias_add(conv11, b11))
+    relu11 = tf.nn.relu(tf.layers.batch_normalization(conv11,training=True))
+    # b11 = int_b(shape=[out11_channel],name='b11')
+    # relu11 = tf.nn.relu(tf.nn.bias_add(conv11, b11))
+    # relu11 = tf.nn.dropout(relu11, rate=dropout_value)  # dropout
+
     # conv2
     w12 = int_w(shape=[conv12_size, conv12_size, inp12_channel, out12_channel], name='W12')
     conv12 = tf.nn.conv2d(
         relu11, w12, strides=[1, 1, 1, 1], padding='SAME', name='conv12'
     )
-    b12 = int_b(shape=[out12_channel],name='b12')
-    relu12 = tf.nn.relu(tf.nn.bias_add(conv12, b12))
+    relu12 = tf.nn.relu(tf.layers.batch_normalization(conv12,training=True))
+    # b12 = int_b(shape=[out12_channel],name='b12')
+    # relu12 = tf.nn.relu(tf.nn.bias_add(conv12, b12))
 
 
     pool6 = tf.nn.max_pool(
@@ -369,15 +380,19 @@ def net(input,len):
     conv13 = tf.nn.conv2d(
         pool6, w13, strides=[1, 1, 1, 1], padding='SAME', name='conv13'
     )
-    b13 = int_b(shape=[out13_channel],name='b13')
-    relu13 = tf.nn.relu(tf.nn.bias_add(conv13, b13))
+    relu13 = tf.nn.relu(tf.layers.batch_normalization(conv13,training=True))
+    # b13 = int_b(shape=[out13_channel],name='b13')
+    # relu13 = tf.nn.relu(tf.nn.bias_add(conv13, b13))
+    # relu13 = tf.nn.dropout(relu13, keep_prob=dropout_value)  # dropout
+
     # conv2
     w14 = int_w(shape=[conv14_size, conv14_size, inp14_channel, out14_channel], name='W14')
     conv14 = tf.nn.conv2d(
         relu13, w14, strides=[1, 1, 1, 1], padding='SAME', name='conv14'
     )
-    b14 = int_b(shape=[out14_channel],name='b14')
-    relu14 = tf.nn.relu(tf.nn.bias_add(conv14, b14))
+    relu14 = tf.nn.relu(tf.layers.batch_normalization(conv14,training=True))
+    # b14 = int_b(shape=[out14_channel],name='b14')
+    # relu14 = tf.nn.relu(tf.nn.bias_add(conv14, b14))
 
 
     # up sample
@@ -385,9 +400,9 @@ def net(input,len):
     conv1_tran = tf.nn.conv2d_transpose(
         relu14, w1_tran,output_shape=[batch_size, len_layer6, len_layer6, up_out1_channel],strides=[1, 2, 2, 1], padding='SAME'
     )
-    # relu11 = tf.nn.relu(tf.layers.batch_normalization(conv11,training=True))
-    b1_tran = int_b(shape=[up_out1_channel],name='b1_tran')
-    relu1_tran = tf.nn.relu(tf.nn.bias_add(conv1_tran, b1_tran))
+    relu1_tran = tf.nn.relu(tf.layers.batch_normalization(conv1_tran,training=True))
+    # b1_tran = int_b(shape=[up_out1_channel],name='b1_tran')
+    # relu1_tran = tf.nn.relu(tf.nn.bias_add(conv1_tran, b1_tran))
 
 
     ### layer8
@@ -399,26 +414,28 @@ def net(input,len):
     conv15 = tf.nn.conv2d(
         concat1, w15, strides=[1, 1, 1, 1], padding='SAME', name='conv15'
     )
-    # relu12 = tf.nn.relu(tf.layers.batch_normalization(conv12,training=True))
-    b15 = int_b(shape=[out15_channel],name='b15')
-    relu15 = tf.nn.relu(tf.nn.bias_add(conv15, b15))
+    relu15 = tf.nn.relu(tf.layers.batch_normalization(conv15,training=True))
+    # b15 = int_b(shape=[out15_channel],name='b15')
+    # relu15 = tf.nn.relu(tf.nn.bias_add(conv15, b15))
+    # relu15 = tf.nn.dropout(relu15, keep_prob=dropout_value)  # dropout
+
     # conv2
     w16 = int_w(shape=[conv16_size, conv16_size, inp16_channel, out16_channel], name='W16')
     conv16 = tf.nn.conv2d(
         relu15, w16, strides=[1, 1, 1, 1], padding='SAME', name='conv16'
     )
-    # relu13 = tf.nn.relu(tf.layers.batch_normalization(conv13,training=True))
-    b16 = int_b(shape=[out16_channel],name='b16')
-    relu16 = tf.nn.relu(tf.nn.bias_add(conv16, b16))
+    relu16 = tf.nn.relu(tf.layers.batch_normalization(conv16,training=True))
+    # b16 = int_b(shape=[out16_channel],name='b16')
+    # relu16 = tf.nn.relu(tf.nn.bias_add(conv16, b16))
 
     # up sample
     w2_tran = int_w(shape=[transconv2, transconv2, up_out2_channel, up_inp2_channel], name='w2_tran')
     conv2_tran = tf.nn.conv2d_transpose(
         relu16, w2_tran, output_shape=[batch_size, len_layer5, len_layer5, up_out2_channel], strides=[1, 2, 2, 1], padding='SAME'
     )
-    # relu14 = tf.nn.relu(tf.layers.batch_normalization(conv14,training=True))
-    b2_tran = int_b(shape=[up_out2_channel],name='b2_tran')
-    relu2_tran = tf.nn.relu(tf.nn.bias_add(conv2_tran, b2_tran))
+    relu2_tran = tf.nn.relu(tf.layers.batch_normalization(conv2_tran,training=True))
+    # b2_tran = int_b(shape=[up_out2_channel],name='b2_tran')
+    # relu2_tran = tf.nn.relu(tf.nn.bias_add(conv2_tran, b2_tran))
 
     ### layer9
     # conv1
@@ -429,15 +446,19 @@ def net(input,len):
     conv17 = tf.nn.conv2d(
         concat2, w17, strides=[1, 1, 1, 1], padding='SAME', name='conv17'
     )
-    b17 = int_b(shape=[out17_channel],name='b17')
-    relu17 = tf.nn.relu(tf.nn.bias_add(conv17, b17))
+    relu17 = tf.nn.relu(tf.layers.batch_normalization(conv17,training=True))
+    # b17 = int_b(shape=[out17_channel],name='b17')
+    # relu17 = tf.nn.relu(tf.nn.bias_add(conv17, b17))
+    # relu17 = tf.nn.dropout(relu17, keep_prob=dropout_value)  # dropout
+
     # conv2
     w18 = int_w(shape=[conv18_size, conv18_size, inp18_channel, out18_channel], name='W18')
     conv18 = tf.nn.conv2d(
         relu17, w18, strides=[1, 1, 1, 1], padding='SAME', name='conv18'
     )
-    b18 = int_b(shape=[out18_channel],name='b18')
-    relu18 = tf.nn.relu(tf.nn.bias_add(conv18, b18))
+    relu18 = tf.nn.relu(tf.layers.batch_normalization(conv18,training=True))
+    # b18 = int_b(shape=[out18_channel],name='b18')
+    # relu18 = tf.nn.relu(tf.nn.bias_add(conv18, b18))
 
 
     # up sample
@@ -445,8 +466,10 @@ def net(input,len):
     conv3_tran = tf.nn.conv2d_transpose(
         relu18, w3_tran, output_shape=[batch_size, len_layer4, len_layer4, up_out3_channel], strides=[1, 2, 2, 1], padding='SAME'
     )
-    b3_tran = int_b(shape=[up_out3_channel],name='b3_tran')
-    relu3_tran = tf.nn.relu(tf.nn.bias_add(conv3_tran, b3_tran))
+    relu3_tran = tf.nn.relu(tf.layers.batch_normalization(conv3_tran,training=True))
+
+    # b3_tran = int_b(shape=[up_out3_channel],name='b3_tran')
+    # relu3_tran = tf.nn.relu(tf.nn.bias_add(conv3_tran, b3_tran))
 
 
     ### layer10
@@ -458,17 +481,19 @@ def net(input,len):
     conv19 = tf.nn.conv2d(
         concat3, w19, strides=[1, 1, 1, 1], padding='SAME', name='conv19'
     )
-    # relu18 = tf.nn.relu(tf.layers.batch_normalization(conv18,training=True))
-    b19 = int_b(shape=[out19_channel],name='b19')
-    relu19 = tf.nn.relu(tf.nn.bias_add(conv19, b19))
+    relu19 = tf.nn.relu(tf.layers.batch_normalization(conv19,training=True))
+    # b19 = int_b(shape=[out19_channel],name='b19')
+    # relu19 = tf.nn.relu(tf.nn.bias_add(conv19, b19))
+    # relu19 = tf.nn.dropout(relu19, keep_prob=dropout_value)  # dropout
 
     # conv2
     w20 = int_w(shape=[conv20_size, conv20_size, inp20_channel, out20_channel], name='W20')
     conv20 = tf.nn.conv2d(
         relu19, w20, strides=[1, 1, 1, 1], padding='SAME', name='conv20'
     )
-    b20 = int_b(shape=[out20_channel],name='b20')
-    relu20 = tf.nn.relu(tf.nn.bias_add(conv20, b20))
+    relu20 = tf.nn.relu(tf.layers.batch_normalization(conv20,training=True))
+    # b20 = int_b(shape=[out20_channel],name='b20')
+    # relu20 = tf.nn.relu(tf.nn.bias_add(conv20, b20))
 
 
     # up sample
@@ -476,9 +501,9 @@ def net(input,len):
     conv4_tran = tf.nn.conv2d_transpose(
         relu20, w4_tran, output_shape=[batch_size, len_layer3, len_layer3, up_out4_channel], strides=[1, 2, 2, 1], padding='SAME'
     )
-    # relu20 = tf.nn.relu(tf.layers.batch_normalization(conv20,training=True))
-    b4_tran = int_b(shape=[up_out4_channel],name='b4_tran')
-    relu4_tran = tf.nn.relu(tf.nn.bias_add(conv4_tran, b4_tran))
+    relu4_tran = tf.nn.relu(tf.layers.batch_normalization(conv4_tran,training=True))
+    # b4_tran = int_b(shape=[up_out4_channel],name='b4_tran')
+    # relu4_tran = tf.nn.relu(tf.nn.bias_add(conv4_tran, b4_tran))
 
     ### layer11
     # conv1
@@ -489,27 +514,28 @@ def net(input,len):
     conv21 = tf.nn.conv2d(
         concat4, w21, strides=[1, 1, 1, 1], padding='SAME', name='conv21'
     )
-    # relu21 = tf.nn.relu(tf.layers.batch_normalization(conv21,training=True))
-    b21 = int_b(shape=[out21_channel],name='b21')
-    relu21 = tf.nn.relu(tf.nn.bias_add(conv21, b21))
+    relu21 = tf.nn.relu(tf.layers.batch_normalization(conv21,training=True))
+    # b21 = int_b(shape=[out21_channel],name='b21')
+    # relu21 = tf.nn.relu(tf.nn.bias_add(conv21, b21))
+    # relu21 = tf.nn.dropout(relu21, keep_prob=dropout_value)  # dropout
 
     # conv2
     w22 = int_w(shape=[conv22_size, conv22_size, inp22_channel, out22_channel], name='W22')
     conv22 = tf.nn.conv2d(
         relu21, w22, strides=[1, 1, 1, 1], padding='SAME', name='conv22'
     )
-    # relu22 = tf.nn.relu(tf.layers.batch_normalization(conv22,training=True))
-    b22 = int_b(shape=[out22_channel],name='b22')
-    relu22 = tf.nn.relu(tf.nn.bias_add(conv22, b22))
+    relu22 = tf.nn.relu(tf.layers.batch_normalization(conv22,training=True))
+    # b22 = int_b(shape=[out22_channel],name='b22')
+    # relu22 = tf.nn.relu(tf.nn.bias_add(conv22, b22))
 
     # up sample
     w5_tran = int_w(shape=[transconv5, transconv5, up_out5_channel, up_inp5_channel], name='w5_tran')
     conv5_tran = tf.nn.conv2d_transpose(
         relu22, w5_tran, output_shape=[batch_size, len_layer2, len_layer2, up_out5_channel], strides=[1, 2, 2, 1], padding='SAME'
     )
-    # relu20 = tf.nn.relu(tf.layers.batch_normalization(conv20,training=True))
-    b5_tran = int_b(shape=[up_out5_channel],name='b5_tran')
-    relu5_tran = tf.nn.relu(tf.nn.bias_add(conv5_tran, b5_tran))
+    relu5_tran = tf.nn.relu(tf.layers.batch_normalization(conv5_tran,training=True))
+    # b5_tran = int_b(shape=[up_out5_channel],name='b5_tran')
+    # relu5_tran = tf.nn.relu(tf.nn.bias_add(conv5_tran, b5_tran))
 
     ### layer12
     # conv1
@@ -520,27 +546,28 @@ def net(input,len):
     conv23 = tf.nn.conv2d(
         concat5, w23, strides=[1, 1, 1, 1], padding='SAME', name='conv23'
     )
-    # relu21 = tf.nn.relu(tf.layers.batch_normalization(conv21,training=True))
-    b23 = int_b(shape=[out23_channel],name='b23')
-    relu23 = tf.nn.relu(tf.nn.bias_add(conv23, b23))
+    relu23 = tf.nn.relu(tf.layers.batch_normalization(conv23,training=True))
+    # b23 = int_b(shape=[out23_channel],name='b23')
+    # relu23 = tf.nn.relu(tf.nn.bias_add(conv23, b23))
+    # relu23 = tf.nn.dropout(relu23, keep_prob=dropout_value)  # dropout
 
     # conv2
     w24 = int_w(shape=[conv24_size, conv24_size, inp24_channel, out24_channel], name='W24')
     conv24 = tf.nn.conv2d(
         relu23, w24, strides=[1, 1, 1, 1], padding='SAME', name='conv22'
     )
-    # relu22 = tf.nn.relu(tf.layers.batch_normalization(conv22,training=True))
-    b24 = int_b(shape=[out24_channel],name='b24')
-    relu24 = tf.nn.relu(tf.nn.bias_add(conv24, b24))
+    relu24 = tf.nn.relu(tf.layers.batch_normalization(conv24,training=True))
+    # b24 = int_b(shape=[out24_channel],name='b24')
+    # relu24 = tf.nn.relu(tf.nn.bias_add(conv24, b24))
 
     # up sample
     w6_tran = int_w(shape=[transconv6, transconv6, up_out6_channel, up_inp6_channel], name='w6_tran')
     conv6_tran = tf.nn.conv2d_transpose(
         relu24, w6_tran, output_shape=[batch_size, len_layer1, len_layer1, up_out6_channel], strides=[1, 2, 2, 1], padding='SAME'
     )
-    # relu20 = tf.nn.relu(tf.layers.batch_normalization(conv20,training=True))
-    b6_tran = int_b(shape=[up_out6_channel],name='b6_tran')
-    relu6_tran = tf.nn.relu(tf.nn.bias_add(conv6_tran, b6_tran))
+    relu6_tran = tf.nn.relu(tf.layers.batch_normalization(conv6_tran,training=True))
+    # b6_tran = int_b(shape=[up_out6_channel],name='b6_tran')
+    # relu6_tran = tf.nn.relu(tf.nn.bias_add(conv6_tran, b6_tran))
 
     #### addtiona conv
     concat6 = tf.concat([relu2, relu6_tran], -1)
@@ -549,27 +576,40 @@ def net(input,len):
     conv25 = tf.nn.conv2d(
         concat6, w25, strides=[1, 1, 1, 1], padding='SAME', name='conv26'
     )
+    relu25 = tf.nn.relu(tf.layers.batch_normalization(conv25,training=True))
+    # b25 = int_b(shape=[out25_channel],name='b25')
+    # relu25 = tf.nn.relu(tf.nn.bias_add(conv25, b25))
+    # relu25 = tf.nn.dropout(relu25, keep_prob=dropout_value)  # dropout
+
     # conv2
     w26 = int_w(shape=[conv26_size, conv26_size, inp26_channel, out26_channel], name='W26')
     conv26 = tf.nn.conv2d(
-        conv25, w26, strides=[1, 1, 1, 1], padding='SAME', name='conv26'
+        relu25, w26, strides=[1, 1, 1, 1], padding='SAME', name='conv26'
     )
-    b26 = int_b(shape=[out26_channel],name='b26')
-    relu26 = tf.nn.relu(tf.nn.bias_add(conv26, b26))
+    relu26 = tf.nn.relu(tf.layers.batch_normalization(conv26,training=True))
+    # b26 = int_b(shape=[out26_channel],name='b26')
+    # relu26 = tf.nn.relu(tf.nn.bias_add(conv26, b26))
+
     # conv3
     w27 = int_w(shape=[conv27_size, conv27_size, inp27_channel, out27_channel], name='W27')
     conv27 = tf.nn.conv2d(
         relu26, w27, strides=[1, 1, 1, 1], padding='SAME', name='conv27'
     )
-    b27 = int_b(shape=[out27_channel], name='b27')
-    relu27 = tf.nn.relu(tf.nn.bias_add(conv27, b27))
+    relu27 = tf.nn.relu(tf.layers.batch_normalization(conv27,training=True))
+
+    # b27 = int_b(shape=[out27_channel], name='b27')
+    # relu27 = tf.nn.relu(tf.nn.bias_add(conv27, b27))
+    # relu27 = tf.nn.dropout(relu27, keep_prob=dropout_value)  # dropout
+
     # conv4
     w28 = int_w(shape=[conv28_size, conv28_size, inp28_channel, out28_channel], name='W28')
     conv28 = tf.nn.conv2d(
         relu27, w28, strides=[1, 1, 1, 1], padding='SAME', name='conv28'
     )
-    b28 = int_b(shape=[out28_channel], name='b28')
-    relu28 = tf.nn.relu(tf.nn.bias_add(conv28, b28))
+    relu28 = tf.nn.relu(tf.layers.batch_normalization(conv28,training=True))
+
+    # b28 = int_b(shape=[out28_channel], name='b28')
+    # relu28 = tf.nn.relu(tf.nn.bias_add(conv28, b28))
     # conv5
     w29 = int_w(shape=[conv29_size, conv29_size, inp29_channel, out29_channel], name='W29')
     conv29 = tf.nn.conv2d(

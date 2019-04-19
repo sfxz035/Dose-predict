@@ -223,7 +223,7 @@ def int_b(shape,name):
     )
     return bais
 
-def net(input,len):
+def net(input,len,dropout_value):
     batch_size = tf.shape(input)[0]
     len_layer1 = len
     len_layer2 = math.ceil(len_layer1/2)
@@ -240,7 +240,7 @@ def net(input,len):
     relu1 = tf.nn.relu(tf.layers.batch_normalization(conv1,training=True))
     # b1 = int_b(shape=[out1_channel],name='b1')
     # relu1 = tf.nn.relu(tf.nn.bias_add(conv1, b1))
-    # relu1 = tf.nn.dropout(relu1, keep_prob=dropout_value)  # dropout
+    relu1 = tf.nn.dropout(relu1, keep_prob=dropout_value)  # dropout
 
        #conv2
     w2 = int_w(shape=[conv2_size,conv2_size,inp2_channel,out2_channel],name='W2')
@@ -263,7 +263,7 @@ def net(input,len):
     relu3 = tf.nn.relu(tf.layers.batch_normalization(conv3,training=True))
     # b3 = int_b(shape=[out3_channel],name='b3')
     # relu3 = tf.nn.relu(tf.nn.bias_add(conv3, b3))
-    # relu3 = tf.nn.dropout(relu3, keep_prob=dropout_value)  # dropout
+    relu3 = tf.nn.dropout(relu3, keep_prob=dropout_value)  # dropout
 
        #conv2
     w4 = int_w(shape=[conv4_size,conv4_size,inp4_channel,out4_channel],name='W4')
@@ -286,7 +286,7 @@ def net(input,len):
     relu5 = tf.nn.relu(tf.layers.batch_normalization(conv5,training=True))
     # b5 = int_b(shape=[out5_channel],name='b5')
     # relu5 = tf.nn.relu(tf.nn.bias_add(conv5, b5))
-    # relu5 = tf.nn.dropout(relu5, keep_prob=dropout_value)  # dropout
+    relu5 = tf.nn.dropout(relu5, keep_prob=dropout_value)  # dropout
 
     # conv2
     w6 = int_w(shape=[conv6_size, conv6_size, inp6_channel, out6_channel], name='W6')
@@ -310,7 +310,7 @@ def net(input,len):
     relu7 = tf.nn.relu(tf.layers.batch_normalization(conv7,training=True))
     # b7 = int_b(shape=[out7_channel],name='b7')
     # relu7 = tf.nn.relu(tf.nn.bias_add(conv7, b7))
-    # relu7 = tf.nn.dropout(relu7, keep_prob=dropout_value)  # dropout
+    relu7 = tf.nn.dropout(relu7, keep_prob=dropout_value)  # dropout
 
     # conv2
     w8 = int_w(shape=[conv8_size, conv8_size, inp8_channel, out8_channel], name='W8')
@@ -334,7 +334,7 @@ def net(input,len):
     relu9 = tf.nn.relu(tf.layers.batch_normalization(conv9,training=True))
     # b9 = int_b(shape=[out9_channel],name='b9')
     # relu9 = tf.nn.relu(tf.nn.bias_add(conv9, b9))
-    # relu9 = tf.nn.dropout(relu9, keep_prob=dropout_value)  # dropout
+    relu9 = tf.nn.dropout(relu9, keep_prob=dropout_value)  # dropout
 
     # conv2
     w10 = int_w(shape=[conv10_size, conv10_size, inp10_channel, out10_channel], name='W10')
@@ -359,7 +359,7 @@ def net(input,len):
     relu11 = tf.nn.relu(tf.layers.batch_normalization(conv11,training=True))
     # b11 = int_b(shape=[out11_channel],name='b11')
     # relu11 = tf.nn.relu(tf.nn.bias_add(conv11, b11))
-    # relu11 = tf.nn.dropout(relu11, rate=dropout_value)  # dropout
+    relu11 = tf.nn.dropout(relu11, rate=dropout_value)  # dropout
 
     # conv2
     w12 = int_w(shape=[conv12_size, conv12_size, inp12_channel, out12_channel], name='W12')
@@ -383,7 +383,7 @@ def net(input,len):
     relu13 = tf.nn.relu(tf.layers.batch_normalization(conv13,training=True))
     # b13 = int_b(shape=[out13_channel],name='b13')
     # relu13 = tf.nn.relu(tf.nn.bias_add(conv13, b13))
-    # relu13 = tf.nn.dropout(relu13, keep_prob=dropout_value)  # dropout
+    relu13 = tf.nn.dropout(relu13, keep_prob=dropout_value)  # dropout
 
     # conv2
     w14 = int_w(shape=[conv14_size, conv14_size, inp14_channel, out14_channel], name='W14')
@@ -417,7 +417,7 @@ def net(input,len):
     relu15 = tf.nn.relu(tf.layers.batch_normalization(conv15,training=True))
     # b15 = int_b(shape=[out15_channel],name='b15')
     # relu15 = tf.nn.relu(tf.nn.bias_add(conv15, b15))
-    # relu15 = tf.nn.dropout(relu15, keep_prob=dropout_value)  # dropout
+    relu15 = tf.nn.dropout(relu15, keep_prob=dropout_value)  # dropout
 
     # conv2
     w16 = int_w(shape=[conv16_size, conv16_size, inp16_channel, out16_channel], name='W16')
@@ -449,7 +449,7 @@ def net(input,len):
     relu17 = tf.nn.relu(tf.layers.batch_normalization(conv17,training=True))
     # b17 = int_b(shape=[out17_channel],name='b17')
     # relu17 = tf.nn.relu(tf.nn.bias_add(conv17, b17))
-    # relu17 = tf.nn.dropout(relu17, keep_prob=dropout_value)  # dropout
+    relu17 = tf.nn.dropout(relu17, keep_prob=dropout_value)  # dropout
 
     # conv2
     w18 = int_w(shape=[conv18_size, conv18_size, inp18_channel, out18_channel], name='W18')
@@ -484,7 +484,7 @@ def net(input,len):
     relu19 = tf.nn.relu(tf.layers.batch_normalization(conv19,training=True))
     # b19 = int_b(shape=[out19_channel],name='b19')
     # relu19 = tf.nn.relu(tf.nn.bias_add(conv19, b19))
-    # relu19 = tf.nn.dropout(relu19, keep_prob=dropout_value)  # dropout
+    relu19 = tf.nn.dropout(relu19, keep_prob=dropout_value)  # dropout
 
     # conv2
     w20 = int_w(shape=[conv20_size, conv20_size, inp20_channel, out20_channel], name='W20')
@@ -517,7 +517,7 @@ def net(input,len):
     relu21 = tf.nn.relu(tf.layers.batch_normalization(conv21,training=True))
     # b21 = int_b(shape=[out21_channel],name='b21')
     # relu21 = tf.nn.relu(tf.nn.bias_add(conv21, b21))
-    # relu21 = tf.nn.dropout(relu21, keep_prob=dropout_value)  # dropout
+    relu21 = tf.nn.dropout(relu21, keep_prob=dropout_value)  # dropout
 
     # conv2
     w22 = int_w(shape=[conv22_size, conv22_size, inp22_channel, out22_channel], name='W22')
@@ -549,7 +549,7 @@ def net(input,len):
     relu23 = tf.nn.relu(tf.layers.batch_normalization(conv23,training=True))
     # b23 = int_b(shape=[out23_channel],name='b23')
     # relu23 = tf.nn.relu(tf.nn.bias_add(conv23, b23))
-    # relu23 = tf.nn.dropout(relu23, keep_prob=dropout_value)  # dropout
+    relu23 = tf.nn.dropout(relu23, keep_prob=dropout_value)  # dropout
 
     # conv2
     w24 = int_w(shape=[conv24_size, conv24_size, inp24_channel, out24_channel], name='W24')
@@ -579,7 +579,7 @@ def net(input,len):
     relu25 = tf.nn.relu(tf.layers.batch_normalization(conv25,training=True))
     # b25 = int_b(shape=[out25_channel],name='b25')
     # relu25 = tf.nn.relu(tf.nn.bias_add(conv25, b25))
-    # relu25 = tf.nn.dropout(relu25, keep_prob=dropout_value)  # dropout
+    relu25 = tf.nn.dropout(relu25, keep_prob=dropout_value)  # dropout
 
     # conv2
     w26 = int_w(shape=[conv26_size, conv26_size, inp26_channel, out26_channel], name='W26')
@@ -599,7 +599,7 @@ def net(input,len):
 
     # b27 = int_b(shape=[out27_channel], name='b27')
     # relu27 = tf.nn.relu(tf.nn.bias_add(conv27, b27))
-    # relu27 = tf.nn.dropout(relu27, keep_prob=dropout_value)  # dropout
+    relu27 = tf.nn.dropout(relu27, keep_prob=dropout_value)  # dropout
 
     # conv4
     w28 = int_w(shape=[conv28_size, conv28_size, inp28_channel, out28_channel], name='W28')

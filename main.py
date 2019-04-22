@@ -3,6 +3,7 @@ import os
 import numpy as np
 import dataset
 import Unet
+import matplotlib.pyplot as plt
 import scipy.io as sio
 
 os.environ["CUDA_VISIBLE_DEVICES"] = '1'   #指定第一块GPU可用
@@ -19,12 +20,28 @@ trainfile_dir = './data/train/'
 testfile_dir = './data/test/'
 input_name = 'RTSt'
 label_name = 'RTDose'
-x_train,y_train = dataset.get_data(trainfile_dir, input_name, label_name,is_norm=True)
+# #一次读取
+# x_data,y_data = dataset.get_data(trainfile_dir, input_name, label_name,is_norm=True)
+# x_train = x_data[:-231,:,:,:]
+# y_train = y_data[:-231,:,:,:]
+# x_test = x_data[-231:,:,:,:]
+# y_test = y_data[-231:,:,:,:]
+## 分别读取
+x_train,y_train = dataset.get_data(trainfile_dir, input_name, label_name)
+
+x_test,y_test = dataset.get_data(testfile_dir, input_name, label_name)
+
+x_train,x_test = dataset.norm(x_train,x_test,version=2)
+y_train,y_test = dataset.norm(y_train,y_test,version=2)
+# for i in range(6):
+#     plt.imshow(x_train[4,:,:,i],cmap='gray')
+#     plt.show()
+# plt.imshow(y_train[4,:,:], cmap='gray')
+# plt.show()
+
 length = x_train.shape[1]
 y_train = np.expand_dims(y_train,-1)
-x_test,y_test = dataset.get_data(testfile_dir, input_name, label_name,is_norm=True)
 y_test = np.expand_dims(y_test,-1)
-
 def train():
     x = tf.placeholder(tf.float32,shape = [None,512,512, 6])
     y_ = tf.placeholder(tf.float32,shape = [None,512,512,1])

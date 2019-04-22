@@ -24,8 +24,9 @@ def get_data(file_dir,input_name, label_name, is_norm = False):
         data_x = data[input_name]
         data_y = data[label_name]
         if is_norm == True:
-            data_x = norm(data_x,version=1)
-            data_y = norm(data_y,version=2)
+            for i in range(6):
+                data_x[:,:,i] = norm(data_x[:,:,i],version=3)
+            data_y = norm(data_y,version=3)
         # for i in range(data_x.shape[2]):
         #     plt.imshow(data_x[:,:,i],cmap='gray')
         #     plt.show()
@@ -37,6 +38,9 @@ def get_data(file_dir,input_name, label_name, is_norm = False):
             print(index)
     data_input = np.asarray(input_sequence)
     data_label = np.asarray(label_sequence)
+    # if is_norm == True:
+    #     data_input = norm(data_input,version=3)
+    #     data_label = norm(data_label,version=3)
     return data_input,data_label
 def random_batch(x_data,y_data,batch_size):
     rnd_indices = np.random.randint(0, len(x_data), batch_size)
@@ -49,8 +53,10 @@ def norm(data,version):
         data_max = np.max(abs(data_pre))
         data_norm = data / data_max
     if version == 2:
-        # min_max_scaler = preprocessing.MinMaxScaler()
-        # data_norm = min_max_scaler.fit_transform(data_pre)
-        data_norm = np.zeros(data_pre.shape, dtype=np.float64)
-        cv.normalize(data_pre, data_norm, 0, 1, norm_type=cv.NORM_MINMAX, dtype=cv.CV_64F)
+        min_max_scaler = preprocessing.MinMaxScaler()
+        data_norm = min_max_scaler.fit_transform(data_pre)
+        # data_norm = np.zeros(data_pre.shape, dtype=np.float64)
+        # cv.normalize(data_pre, data_norm, 0, 1, norm_type=cv.NORM_MINMAX, dtype=cv.CV_64F)
+    if version == 3:
+        data_norm = preprocessing.scale(data_pre)
     return data_norm

@@ -108,6 +108,10 @@ def train():
                           % (step, loss_value, examples_per_sec, sec_per_batch))
                 if (count + 1) % 20000 == 0:
                     saver.save(sess, os.path.join(savenet_path, 'conv_unet%d.ckpt-done' % (count)))
-
+ # if gpu_id == 0:
+ #        batch_norm_updates_op = tf.group(*tf.get_collection(tf.GraphKeys.UPDATE_OPS))
+ #        with tf.control_dependencies(
+ #                [variables_averages_op, apply_gradient_op, batch_norm_updates_op]):
+ #            self.train_op = tf.no_op(name='train_op')
 if __name__ == '__main__':
     train()

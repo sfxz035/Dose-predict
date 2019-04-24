@@ -5,7 +5,6 @@ import cv2 as cv
 import scipy.io as sio
 import pydicom
 import os
-import gen_RTDose
 from matplotlib.path import Path
 from skimage import measure, transform
 def inpolygon(xq, yq, xv, yv):
@@ -36,8 +35,8 @@ def matchContour(RS_file,Slice,index):
         ite = 0
         nub = index[i]          ## 靶区序号
         if nub == -1:
-            print("存在-1情况,靶区顺序号: "+str(i))
-            print(RS_file.PatientName)
+            print(RS_file.PatientName+"存在-1情况,靶区顺序号: "+str(i))
+            # print(RS_file.PatientName)
         try:
             numberofcoutours = len(RS_file.ROIContourSequence[nub].ContourSequence) #每一层的靶区层数
             for j in range(numberofcoutours):
@@ -52,7 +51,6 @@ def matchContour(RS_file,Slice,index):
                     # mub.append((nub,j,ite))
                     if ite >1 :
                         nubslc = nubslc+' '+str(j)
-                        # print(str(Slice)+' '+str(nub)+' '+nubslc)
                         print("\t","Slice: [%2d], 靶区顺序号: [%2d], ROI contour靶区序号: [%2d]," \
                               % (Slice,i,nub)+ 'Contour序号:'+nubslc)
                         print("\t",RS_file.PatientName)
@@ -106,7 +104,7 @@ def rectcontour(RS_file,dcm_file, pairCont,indexList):
             # plt.plot(x_cont,y_cont)
             # plt.show()
         elif ite > 1:
-            print(w)
+            # print(w)
             lList = list(map(int,l.split(' ')))
             mask_sum = np.zeros([512,512,ite],dtype=bool)
             # j = ite - 1

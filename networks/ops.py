@@ -27,7 +27,7 @@ def conv_bn(inpt ,output_dim, k_h = 3, k_w = 3, strides = [1, 1, 1, 1], is_train
     with tf.variable_scope(name):
         filter_ = weight_variable([k_h,k_w,inpt.get_shape()[-1],output_dim],name='weights')
         conv = tf.nn.conv2d(inpt, filter=filter_, strides=strides, padding="SAME")
-        batch_norm = tf.layers.batch_normalization(conv, is_training=is_train) ###由contrib换成layers
+        batch_norm = tf.layers.batch_normalization(conv, training=is_train) ###由contrib换成layers
     return batch_norm
 
 def BatchNorm(
@@ -102,7 +102,7 @@ def Deconv2d_bn(
         deconv = tf.nn.conv2d_transpose(
             value, weights, output_shape, strides = strides
         )
-        batch_norm = tf.layers.batch_normalization(deconv, is_training=is_train) ###由contrib换成layers
+        batch_norm = tf.layers.batch_normalization(deconv, training=is_train) ###由contrib换成layers
         # deconv = tf.reshape(tf.nn.bias_add(deconv, biases), deconv.get_shape())
         if with_w:
             return batch_norm, weights

@@ -21,8 +21,8 @@ def get_data(file_dir,input_name, label_name, is_norm = False):
     input_sequence, label_sequence = [], []
     for index in range(sample_num):
         data = np.load(file_name[index])
-        data_x = data[input_name]
-        data_y = data[label_name]
+        data_x = data[input_name].astype(np.float32)
+        data_y = data[label_name].astype(np.float32)
         # if is_norm == True:
         #     for i in range(6):
         #         data_x[:,:,i] = norm(data_x[:,:,i],version=3)

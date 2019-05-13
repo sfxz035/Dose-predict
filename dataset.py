@@ -5,7 +5,36 @@ import os
 import cv2 as cv
 from sklearn import preprocessing
 
+def maxmin(file_dir,input_name, label_name):
+    file_name = get_files(file_dir)
+    sample_num = len(file_name)
 
+    inputmaxL, inputminL = [], []
+    labelmaxL, labelminL = [],[]
+    for index in range(sample_num):
+        data = np.load(file_name[index])
+        data_x = data[input_name]
+        data_y = data[label_name]
+        data_shape = np.shape(data_x)
+        input_max = []
+        input_min=[]
+        for i in range(data_shape[-1]):
+            input_max.append(np.max(abs(data_x[...,i])))
+            input_min.append(np.min(abs(data_x[...,i])))
+        inputmaxL.append(input_max)
+        inputminL.append(input_min)
+        label_max = np.max(data_y)
+        label_min = np.min(data_y)
+        labelmaxL.append(label_max)
+        labelminL.append(label_min)
+        if (index + 1) % 100 == 0:
+            print(index)
+    data_inputmax = np.asarray(inputmaxL)
+    data_inputmin = np.asarray(inputminL)
+    data_labelmax = np.asarray(labelmaxL)
+    data_labelmin = np.asarray(labelminL)
+
+    return data_inputmax,data_inputmin,data_labelmax,data_labelmin
 def get_files(file_dir):
     # file_dir: 文件夹路径
     # return: 文件夹下的所有文件名
@@ -22,10 +51,10 @@ def get_data(file_dir,input_name, label_name, sample_num=None,is_test=False):
     input_sequence, label_sequence = [], []
     for index in range(sample_num):
         data = np.load(file_name[index])
-        data_x = data[input_name]
-        data_y = data[label_name]
-        # data_x = data[input_name].astype(np.float32)
-        # data_y = data[label_name].astype(np.float32)
+        # data_x = data[input_name]
+        # data_y = data[label_name]
+        data_x = data[input_name].astype(np.float32)
+        data_y = data[label_name].astype(np.float32)
         input_sequence.append(data_x)
         label_sequence.append(data_y)
         if (index + 1) % 100 == 0:

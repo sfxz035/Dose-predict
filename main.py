@@ -16,11 +16,11 @@ epoch = 2000000
 batch_size = 8
 learning_rate = 0.0001
 savenet_path = './libSaveNet/save_unet/'
-trainfile_dir = './data/dataSlice/train/'
-testfile_dir = './data/dataSlice/test/'
+trainfile_dir = './data/train/'
+testfile_dir = './data/test/'
 input_name = 'RTSt'
 label_name = 'RTDose'
-
+channel = 6
 ## 分别读取
 x_train,y_train = dataset.get_data(trainfile_dir, input_name, label_name)
 x_test,y_test = dataset.get_data(testfile_dir, input_name, label_name)
@@ -35,9 +35,9 @@ y_train,y_test = dataset.norm(y_train,y_test,version=1)
 #     plt.show()
 # plt.imshow(y_train[4,:,:], cmap='gray')
 # plt.show()
-length = x_train.shape[1]
 def train():
-    x = tf.placeholder(tf.float32,shape = [batch_size,512,512, 7])
+    x = tf.placeholder(tf.float32,shape = [batch_size,512,512, channel])
+    print(channel)
     y_ = tf.placeholder(tf.float32,shape = [batch_size,512,512,1])
 
     y = U_net.inference(x)
@@ -47,6 +47,7 @@ def train():
     summary_op2 = tf.summary.scalar('testloss', loss)
     batch_norm_updates_op = tf.group(*tf.get_collection(tf.GraphKeys.UPDATE_OPS))
     with tf.control_dependencies([batch_norm_updates_op]):
+
         train_step = tf.train.AdamOptimizer(learning_rate).minimize(loss)
     variables_to_restore = []
     for v in tf.global_variables():
@@ -79,7 +80,7 @@ def train():
                 writer.add_summary(sess.run(summary_op, feed_dict={x: batch_input, y_: batch_labels}), m)
                 writer2.add_summary(sess.run(summary_op2, feed_dict={x: batch_input_test,
                                                                      y_: batch_labels_test}), m)
-            if (count + 1) % 10000 == 0:
+            if (count + 1) % 20000 == 0:
                 saver.save(sess, os.path.join(savenet_path, 'conv_unet%d.ckpt-done' % (count)))
 
 
